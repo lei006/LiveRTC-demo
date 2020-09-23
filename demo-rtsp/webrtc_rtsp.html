@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html id="home" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+    </head>
+    <body>
+		<div style="width:400px; height:300px;">
+			<video id="remoteVideo" style="width:100%; height:100%;object-fit: fill" autoplay muted></video>
+		</div>
+	</body>
+	
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="http://livertc.eyoujs.com/LivePeer.js"></script>
+	<script>
+		let test_id = "/abcd.sdp"
+		async function video_subscribe(){
+		
+			// 1.新建peer
+			//let livePeer = new LivePeerJS(axios,{host_url:"demo.livertc.eyoujs.com:8088"})
+			//let livePeer = new LivePeerJS(axios,{host_url:"47.103.69.4:8088"})
+			let livePeer = new LivePeerJS(axios,{host_url:"127.0.0.1:8088"})
+			// 2.登录Sfu上线
+			let ret = await livePeer.login("123456")
+
+			// 3. 取得媒体列表
+			let media_list = await livePeer.publisher_list()
+			console.log("media_list=", media_list)
+
+			// 3.定阅流
+            livePeer.subscribe_webrtc(test_id, function(stream){
+               document.getElementById('remoteVideo').srcObject = stream
+            });			
+		}
+		video_subscribe();
+
+
+	</script>
+</html>
